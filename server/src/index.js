@@ -1,3 +1,4 @@
+
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -8,6 +9,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const middlewares = require('./middlewares');
+const logs = require('./api/logs');
 
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
@@ -26,10 +28,12 @@ app.get('/', (req, res) => {
   });
 });
 
+app.use('/api/logs', logs);
+
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
-const port = process.env.PORT || 1337;
+const port = process.env.PORT;
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console
